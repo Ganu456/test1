@@ -1,0 +1,18 @@
+name: Push JSON to MongoDB
+
+on:
+  workflow_dispatch: # This event triggers the workflow when you manually run it from the Actions tab.
+
+jobs:
+  push-json-to-mongodb:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Push JSON to MongoDB
+      run: |
+        # Add a command here to push your JSON file to MongoDB using a MongoDB client or script.
+        # Use the MongoDB URI you obtained earlier.
+
