@@ -18,12 +18,10 @@ jobs:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
       run: |
         # Build the Docker image
-        docker build -t your-docker-image-name .
+        docker build -t my-mongodb-json-importer .
 
         # Run the Docker container with the MONGODB_URI environment variable
-        docker run -e MONGODB_URI=$MONGODB_URI your-docker-image-name
-
-    # Add additional steps here if needed
+        docker run -e MONGODB_URI=$MONGODB_URI my-mongodb-json-importer
 
     - name: Error Handling
       run: |
