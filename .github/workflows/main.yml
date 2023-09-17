@@ -3,7 +3,7 @@ name: Push to MongoDB
 on:
   push:
     branches:
-      - main  # Change this to the branch you want to trigger the action on
+      - main
 
 jobs:
   push_to_mongodb:
@@ -15,6 +15,11 @@ jobs:
 
     - name: Set up MongoDB URI
       run: echo "MONGODB_URI=$MONGODB_URI" >> $GITHUB_ENV
+
+    - name: Install MongoDB tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y mongodb-clients
 
     - name: Push to MongoDB
       run: |
