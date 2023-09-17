@@ -1,1 +1,27 @@
 
+version: '3'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: Ganesh  # Replace with your desired root username
+      MONGO_INITDB_ROOT_PASSWORD: Ganesh@0808  # Replace with your desired root password
+    volumes:
+      - mongodb_data:/data/db
+
+  your_app:
+    build: ./your_app_directory
+    container_name: your_app
+    depends_on:
+      - mongodb
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_USERNAME: Ganesh  # Replace with your desired application username
+      MONGODB_PASSWORD: Ganesh@0808  # Replace with your desired application password
+
+volumes:
+  mongodb_data:
