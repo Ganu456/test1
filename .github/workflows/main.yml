@@ -1,17 +1,29 @@
-name: Deploy Docker Compose
+name: Push File to MongoDB
 
 on:
   push:
     branches:
-      - main
+      - main  # You can specify the branch you want to trigger the workflow
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
+  push_to_mongodb:
+    runs-on: ubuntu-latest  # You can choose the runner's operating system
 
     steps:
-    - name: Checkout code
+    - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Start Docker Compose
-      run: docker-compose up -d
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14  # Choose the Node.js version you need
+
+    - name: Install Dependencies
+      run: npm install  # You might need additional commands if you have specific dependencies
+
+    - name: Push File to MongoDB
+      env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}  # Set your MongoDB connection string as a secret
+      run: |
+        # Replace 'fileToPush.json' with your file and MongoDB-related code
+        node pushToMongo.js fileToPush.json $MONGODB_URI
