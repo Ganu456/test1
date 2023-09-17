@@ -2,7 +2,7 @@ name: Push JSON to MongoDB
 
 on:
   workflow_dispatch: # Trigger the workflow manually from the Actions tab.
-  
+
 jobs:
   push-json-to-mongodb:
     runs-on: ubuntu-latest
@@ -11,49 +11,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16' # Use Node.js 16 or the version compatible with your script.
-
-    - name: Set up MongoDB connection
-      run: |
-        # Set up your MongoDB connection details using secrets or environment variables.
-        # Example:
-        # export MONGODB_URI="mongodb://username:password@your-mongodb-host:27017/your-database"
-        # You should store sensitive information like credentials as GitHub Secrets.
-        echo "MONGODB_URI=$MONGODB_URI" >> $GITHUB_ENV
+    - name: Install MongoDB tools
+      run: sudo apt-get install -y mongodb-clients
 
     - name: Push JSON to MongoDB
-      run: |
-        # Install MongoDB driver or client for Node.js using npm or yarn.
-        # Example: npm install mongodb
-        # Replace 'mongodb' with the actual package name if needed.
-
-        # Use a script or command to push your JSON file to MongoDB.
-        # Example:
-        # node push-json-to-mongodb.js
-        # Adjust the script to match your specific requirements.
-
-        # In your script (e.g., push-json-to-mongodb.js):
-        # const { MongoClient } = require('mongodb');
-        # const uri = process.env.MONGODB_URI;
-        #
-        # async function main() {
-        #   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-        #   try {
-        #     await client.connect();
-        #     console.log("Connected to MongoDB");
-        #
-        #     // Your code to push the JSON data to MongoDB goes here.
-        #
-        #   } finally {
-        #     await client.close();
-        #   }
-        # }
-        #
-        # main().catch(console.error);
-        # Replace the above example with your own logic.
-
       env:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      run: |
+        # Download the JSON file from the repository
+        wget https://raw.githubusercontent.com/${{ github.repository }}/main/data.json
+
+        # Use `mongoimport` to push the JSON data to MongoDB
+        mongoimport --uri="${MONGODB_URI}" --collection="your-collection-name" --file=data.json
+
+        # Remove the downloaded JSON file
+        rm data.json
