@@ -1,30 +1,26 @@
-name: Push to MongoDB
+version: '3'
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: Ganesh
+      MONGO_INITDB_ROOT_PASSWORD: Ganesh@0808  # Replace with your desired root password
+    volumes:
+      - mongodb_data:/data/db
 
-on:
-  push:
-    branches:
-      - main
+  your_app:
+    build: ./your_app_directory
+    container_name: your_app
+    depends_on:
+      - mongodb
+    environment:
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_USERNAME: Ganesh  
+      MONGODB_PASSWORD: Ganesh@0808 
 
-jobs:
-  push_to_mongodb:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up MongoDB URI
-      run: echo "MONGODB_URI=$MONGODB_URI" >> $GITHUB_ENV
-
-    - name: Install MongoDB tools
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y mongodb-clients
-
-    - name: Push to MongoDB
-      run: |
-        FILE_CONTENT=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3.raw" -L "https://raw.githubusercontent.com/${{ github.repository }}/main/data.json")
-        echo "db.collection.insertOne({ content: '$FILE_CONTENT' })" > mongo_script.js
-        mongo "$MONGODB_URI" --file mongo_script.js
-      env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+volumes:
+  mongodb_data:
