@@ -3,11 +3,11 @@ name: Push File to MongoDB
 on:
   push:
     branches:
-      - main  # You can specify the branch you want to trigger the workflow
+      - main
 
 jobs:
   push_to_mongodb:
-    runs-on: ubuntu-latest  # You can choose the runner's operating system
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Repository
@@ -16,14 +16,13 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 14  # Choose the Node.js version you need
+        node-version: 14
 
     - name: Install Dependencies
-      run: npm install  # You might need additional commands if you have specific dependencies
+      run: npm install
 
     - name: Push File to MongoDB
       env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}  # Set your MongoDB connection string as a secret
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
       run: |
-        # Replace 'fileToPush.json' with your file and MongoDB-related code
         node pushToMongo.js fileToPush.json $MONGODB_URI
