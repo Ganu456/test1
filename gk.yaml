@@ -1,0 +1,21 @@
+name: Push JSON to MongoDB
+
+on:
+  push:
+    paths:
+      - 'gk.json'
+
+jobs:
+  push-to-mongodb:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and run Docker container
+      env:
+        MONGODB_URI: ${{ mongodb+srv://Ganesh:Ganesh@0808@cluster0.h1e3iec.mongodb.net/ }}
+      run: |
+        docker build -t your-docker-image-name .
+        docker run -e MONGODB_URI=$MONGODB_URI your-docker-image-name
