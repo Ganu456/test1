@@ -1,27 +1,17 @@
+name: Deploy Docker Compose
 
-version: '3'
-services:
-  mongodb:
-    image: mongo:latest
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: Ganesh  # Replace with your desired root username
-      MONGO_INITDB_ROOT_PASSWORD: Ganesh@0808  # Replace with your desired root password
-    volumes:
-      - mongodb_data:/data/db
+on:
+  push:
+    branches:
+      - main
 
-  your_app:
-    build: ./your_app_directory
-    container_name: your_app
-    depends_on:
-      - mongodb
-    environment:
-      MONGODB_HOST: mongodb
-      MONGODB_PORT: 27017
-      MONGODB_USERNAME: Ganesh  # Replace with your desired application username
-      MONGODB_PASSWORD: Ganesh@0808  # Replace with your desired application password
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-volumes:
-  mongodb_data:
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Start Docker Compose
+      run: docker-compose up -d
