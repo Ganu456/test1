@@ -1,36 +1,25 @@
-name: Push JSON to MongoDB
+name: Push to MongoDB
 
 on:
-  workflow_dispatch: # Trigger the workflow manually from the Actions tab.
+  push:
+    branches:
+      - main  # Change this to the branch you want to trigger the action on
 
 jobs:
-  push-json-to-mongodb:
+  push_to_mongodb:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Update package lists
-      run: sudo apt-get update
+    - name: Set up MongoDB URI
+      run: echo "MONGODB_URI=$MONGODB_URI" >> $GITHUB_ENV
 
-    - name: Install MongoDB tools
+    - name: Push to MongoDB
       run: |
-        sudo apt-get install -y gnupg
-        wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
-        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -sc)/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
-        sudo apt-get update
-        sudo apt-get install -y mongodb-clients
-
-    - name: Push JSON to MongoDB
+        FILE_CONTENT=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github.v3.raw" -L "https://raw.githubusercontent.com/${{ github.repository }}/main/data.json")
+        echo "db.collection.insertOne({ content: '$FILE_CONTENT' })" > mongo_script.js
+        mongo "$MONGODB_URI" --file mongo_script.js
       env:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      run: |
-        # Download the JSON file from the repository
-        wget https://raw.githubusercontent.com/${{ github.repository }}/main/data.json
-
-        # Use `mongoimport` to push the JSON data to MongoDB
-        mongoimport --uri="${MONGODB_URI}" --collection="your-collection-name" --file=data.json
-
-        # Remove the downloaded JSON file
-        rm data.json
