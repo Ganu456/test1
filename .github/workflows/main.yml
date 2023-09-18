@@ -1,24 +1,40 @@
-name: Run tests
-on: [push]
+name: Push Data to MongoDB
+on:
+  push:
+    branches:
+      - main  # Specify the branch you want to trigger this workflow on
 jobs:
-  build:
+  push_data_to_mongodb:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-        mongodb-version: ['4.2', '4.4', '5.0', '6.0']
     steps:
-    - name: Git checkout
-      uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Start MongoDB
-      uses: supercharge/mongodb-github-action@1.10.0
-      with:
-        mongodb-version: ${{ matrix.mongodb-version }}
-    - run: npm install
-    - run: npm test
+    - name: Checkout code
+      uses: actions/checkout@v2  # This step checks out your code repository
+    - name: Set up MongoDB and import data
       env:
-        CI: true
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}  # Use the MongoDB URI secret
+      run: |
+        # Set your MongoDB connection URI as an environment variable
+        export MONGODB_URI="${{ secrets.MONGODB_URI }}"
+        # Path to your JSON data file
+        JSON_FILE="./data.json"
+        # MongoDB collection name
+        COLLECTION_NAME="your-collection-name"
+        # Check if the MongoDB URI is set
+        if [ -z "$MONGODB_URI" ]; then
+          echo "Error: MongoDB URI not set."
+          exit 1
+        fi
+        # Check if the JSON file exists
+        if [ ! -f "$JSON_FILE" ]; then
+          echo "Error: JSON data file not found."
+          exit 1
+        fi
+        # Push data to MongoDB
+        mongoimport --uri "$MONGODB_URI" --collection "$COLLECTION_NAME" --file "$JSON_FILE"
+        # Check the exit code of mongoimport
+        if [ $? -eq 0 ]; then
+          echo "Data imported successfully into MongoDB."
+        else
+          echo "Error: Failed to import data into MongoDB."
+          exit 1
+        fi
