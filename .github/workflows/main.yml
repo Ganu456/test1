@@ -1,11 +1,6 @@
-# GitHub Repository Details
-github_username: Ganu456
-github_repo: gh repo clone Ganu456/test1
-github_json_file: data.json
-
-# MongoDB Connection Details
-mongodb_uri: "mongodb+srv://Ganesh:mRamX9lmMcTd8GUt@cluster0.h1e3iec.mongodb.net/"
-mongodb_collection: data.json
-
-# Temporary Directory
-temp_dir: gh repo clone Ganu456/test1
+name: Push Data to MongoDB
+  run: |
+    chmod +x push_data.sh  # Make the Bash script executable
+    ./push_data.sh  # Execute the Bash script
+  env:
+    MONGODB_URI: ${{ secrets.MONGODB_URI }}
