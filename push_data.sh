@@ -4,7 +4,7 @@ export MONGODB_URI="mongodb+srv://Ganesh:mRamX9lmMcTd8GUt@cluster0.h1e3iec.mongo
 # Path to your JSON data file
 JSON_FILE="./data.json"
 # MongoDB collection name
-COLLECTION_NAME="shell"
+COLLECTION_NAME="gk"
 # Check if the MongoDB URI is set
 if [ -z "$MONGODB_URI" ]; then
   echo "Error: MongoDB URI not set."
