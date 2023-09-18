@@ -1,41 +1,11 @@
-#!/bin/bash
-
 # GitHub Repository Details
-github_username="Ganu456"
-github_repo="gh repo clone Ganu456/test1"
-github_json_file="data.json"
+github_username: Ganu456
+github_repo: gh repo clone Ganu456/test1
+github_json_file: data.json
 
 # MongoDB Connection Details
-mongodb_uri=""
-mongodb_collection="data.json"
+mongodb_uri: "mongodb+srv://Ganesh:mRamX9lmMcTd8GUt@cluster0.h1e3iec.mongodb.net/"
+mongodb_collection: data.json
 
 # Temporary Directory
-temp_dir="gh repo clone Ganu456/test1"
-
-# Clone the GitHub repository
-git clone "https://github.com/Ganu456/test1.git"
-
-# Check if the repository was cloned successfully
-if [ $? -ne 0 ]; then
-  echo "Failed to clone the GitHub repository."
-  exit 1
-fi
-
-# Parse the JSON file and extract the data (replace 'your_field' with your JSON structure)
-json_data=$(jq '.your_field' "$temp_dir/$github_json_file")
-
-# Insert data into MongoDB collection
-mongoimport --uri "$mongodb_uri" --collection "$mongodb_collection" --jsonArray <<< "$json_data"
-
-# Check if the import was successful
-if [ $? -eq 0 ]; then
-  echo "Data imported successfully into MongoDB."
-else
-  echo "Failed to import data into MongoDB."
-  exit 1
-fi
-
-# Clean up by removing the temporary directory
-rm -rf "$temp_dir"
-
-echo "Script completed successfully."
+temp_dir: gh repo clone Ganu456/test1
