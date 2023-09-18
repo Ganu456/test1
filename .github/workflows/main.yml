@@ -1,6 +1,21 @@
 name: Push Data to MongoDB
-  run: |
-    chmod +x push_data.sh  # Make the Bash script executable
-    ./push_data.sh  # Execute the Bash script
-  env:
-    MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
+on:
+  push:
+    branches:
+      - main  # Replace with the branch you want to trigger this on
+
+jobs:
+  push_data:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Push Data to MongoDB
+      run: |
+        chmod +x push_data.sh  # Make the Bash script executable
+        ./push_data.sh  # Execute the Bash script
+      env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
