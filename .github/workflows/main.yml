@@ -12,7 +12,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
+    - name : install mongo
+      run: |
+        sudo sudo apt-get install mongodb-clients -y
     - name: Push Data to MongoDB
       run: |
         chmod +x push_data.sh  # Make the Bash script executable
