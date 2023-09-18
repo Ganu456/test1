@@ -1,6 +1,6 @@
 #!/bin/bash
 # Set your MongoDB connection URI as an environment variable
-export MONGODB_URI="mongodb://username:password@hostname:port/database"
+export MONGODB_URI="mongodb+srv://Ganesh:mRamX9lmMcTd8GUt@cluster0.h1e3iec.mongodb.net/"
 # Path to your JSON data file
 JSON_FILE="./data.json"
 # MongoDB collection name
