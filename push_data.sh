@@ -16,7 +16,7 @@ if [ ! -f "$JSON_FILE" ]; then
   exit 1
 fi
 # Push data to MongoDB
-mongoimport --uri "$MONGODB_URI" --collection "$COLLECTION_NAME" --file "$JSON_FILE"
+mongoimport --uri "$MONGODB_URI" --collection "$COLLECTION_NAME" --file "$JSON_FILE" --jsonArray
 # Check the exit code of mongoimport
 if [ $? -eq 0 ]; then
   echo "Data imported successfully into MongoDB."
