@@ -14,8 +14,8 @@ jobs:
       uses: actions/checkout@v2
     - name : install mongo
       run: |
-        sudo apt-get update -y
-        sudo apt-get install -y mongodb-clients
+        wget https://downloads.mongodb.com/compass/mongodb-mongosh_1.10.6_amd64.deb
+        sudo dpkg -i mongodb-mongosh_1.10.6_amd64.deb
     - name: Push Data to MongoDB
       run: |
         chmod +x push_data.sh  # Make the Bash script executable
