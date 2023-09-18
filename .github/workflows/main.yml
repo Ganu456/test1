@@ -1,28 +1,41 @@
-name: Push File to MongoDB
+#!/bin/bash
 
-on:
-  push:
-    branches:
-      - main
+# GitHub Repository Details
+github_username="Ganu456"
+github_repo="gh repo clone Ganu456/test1"
+github_json_file="data.json"
 
-jobs:
-  push_to_mongodb:
-    runs-on: ubuntu-latest
+# MongoDB Connection Details
+mongodb_uri=""
+mongodb_collection="data.json"
 
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+# Temporary Directory
+temp_dir="gh repo clone Ganu456/test1"
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14
+# Clone the GitHub repository
+git clone "https://github.com/Ganu456/test1.git"
 
-    - name: Install Dependencies
-      run: npm install
+# Check if the repository was cloned successfully
+if [ $? -ne 0 ]; then
+  echo "Failed to clone the GitHub repository."
+  exit 1
+fi
 
-    - name: Push File to MongoDB
-      env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      run: |
-        node pushToMongo.js fileToPush.json $MONGODB_URI
+# Parse the JSON file and extract the data (replace 'your_field' with your JSON structure)
+json_data=$(jq '.your_field' "$temp_dir/$github_json_file")
+
+# Insert data into MongoDB collection
+mongoimport --uri "$mongodb_uri" --collection "$mongodb_collection" --jsonArray <<< "$json_data"
+
+# Check if the import was successful
+if [ $? -eq 0 ]; then
+  echo "Data imported successfully into MongoDB."
+else
+  echo "Failed to import data into MongoDB."
+  exit 1
+fi
+
+# Clean up by removing the temporary directory
+rm -rf "$temp_dir"
+
+echo "Script completed successfully."
