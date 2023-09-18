@@ -15,7 +15,7 @@ jobs:
     - name : install mongo
       run: |
         wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-debian10-x86_64-100.8.0.deb
-        sudo dpkg -i mongodb-mongosh_1.10.6_amd64.deb
+        sudo dpkg -i mongodb-database-tools-debian10-x86_64-100.8.0.deb
     - name: Push Data to MongoDB
       run: |
         chmod +x push_data.sh  # Make the Bash script executable
